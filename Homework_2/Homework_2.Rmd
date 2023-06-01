@@ -1,0 +1,234 @@
+---
+title: "Homework 2"
+output: html_notebook
+---
+FUNCIONES EN R
+
+Una función es un conjunto de instrucciones que convierten las entradas (inputs)
+en resultados (outputs) deseados. En la siguiente figura se muestra una ilustra
+ción de lo qu es una función
+
+Inputs -> Función Machine -> outputs
+
+ESTRUCTURA DE UNA FUNCIÓN
+
+Entradas o argumentos: sirve para ingresar información necesaria para realizar
+el procedimiento de la función. Los argumentos pueden estar vacíos y a la espera
+de que el usuario ingrese valores, o pueden tener valores por defecto. Una fun-
+ción puede tener o no argumentos de entrada, en los ejemplos se mostrarán estos 
+casos.
+
+Cuerpo: está formado por un conjunto de instrucciones que transforman las entradas
+en las salidas deseadas. Si el cuerpo de la función está formado por varias ins-
+trucciones estas deben ir entre llaves {}.
+
+Salidas: son los resultados de la función . Toda función debe tener al menos un
+resultado. Si una función entrega varios tipos de objetos se acostumbra a orga
+nizarlos en una lista que puede manejar los diferentes tipos de objetos.
+
+A continuación se muestra la estructura general de una función en R
+
+nombre_de_funcion <- function(par1, par2, ...){
+  cuerpo
+  cuerpo
+  cuerpo
+  cuerpo
+  return(resultado)
+}
+
+EJEMPLO DE FUNCION 1
+
+Construir una función que reciba dos números y que entregue la suma de estos
+números.
+
+```{r}
+suma <- function(x, y) {
+  return(x + y)
+}
+
+suma(x=4, y=6)
+```
+EJEMPLO DE FUNCION 2
+
+Construir una función que genere números aleatorios entre cero y uno hasta que 
+la suma de estos número supere por primera vez el valor de 3. La función debe 
+entregar la cantidad de números aleatorios generados para que se cumpla la con-
+dición.
+
+```{r}
+fun1 <- function(){
+  num <- runif(1)
+  veces <- 1
+  while(sum(num) < 3){
+    veces <- veces + 1
+    num[veces] <- runif(1)
+  }
+  return(veces)
+}
+
+fun1()
+```
+ARGUMENTOS DE UNA FUNCION
+
+Los argumentos de una función son una serie de valores (opcionales)que se pasan 
+a la función, de modo que ciertas variables dentro de estas posean diferentes va
+lores en cada llamada a la función.
+
+Cuando se hace llamado a una función, el orden e que se pasan los valores de los
+argunMentos corresponde con la ubicación de estos en la delación de la función. 
+
+El orden en que se hace la comprobación de argumentos es:
+1. Coincidencia exacta del nombre del argumento
+2. Coincidencia parcial del nombre del argumento
+3. Asignación por posición
+
+Argumentos por valor
+
+Las funciones realizan una serie de pasos y finalizan sin devolver ningún valor. 
+En muchas ocasiones deseamos que las funciones al finalizar su ejecución devuel-
+van algún valor. Para esto tenemos dos posibilidades.
+
+1. Es hacer que la ultima linea de código evaluada dentro de una función sea el
+valor que queremos de vuelta.
+2. La segunda es indicar explicitamente mediante el comando return(). Cuando se 
+ejecuta una instrucción dentro de una función, esta finaliza inmediatamente de-
+volviendo el valor indicado.
+
+FAMILIA APPLY
+
+La familia de funciones apply es usada para aplicar una función a cada elemento
+de una estructura de datos. En particular, es usada para aplicar funciones en 
+matrices, data frames, arrays y listas.
+
+Con esta familia de funciones podemos automatizar tareas complejas usando poca 
+líneas de código y es una de las características distintivas de R como lenguaje 
+de programación.
+
+La familia de funciones apply es una expresión de los rasgos del paradigma fun-
+cional de programación presentes en R. Sobre esto no profundizaremos demasiado, 
+pero se refiere saber que en R las funciones son “ciudadanos de primera”, con la
+misma importancia que los objetos, y por lo tanto, operamos en ellas.
+
+La familia de funciones apply no sólo recibe datos como argumentos, también reci-
+be funciones.
+
+FUNCIONES DE LA FAMILIA APPLY
+
+La familia apply esta formada por las siguientes funciones
+* apply()
+* eapply()
+* lapply()
+* mapply()
+* rapply()
+* sapply()
+* tapply()
+* vapply()
+
+Es una familia numerosa y esta variedad de funciones se debe a que varias de ellas
+tienen aplicaciones sumamente específicas.
+
+APPLY : Aplica una función a todos los elementos de una matriz.
+
+La estructura de esta función es la siguiente:
+
+apply(X, MARGIN, FUN)
+
+Apply tiene tres argumentos
+
+* X: Una matriz o un objeto que pueda coercinarse a una matriz, generalmente, un
+data frame. 
+* MARGIN: La dimensión (margen) que agrupará los elementos de la matriz x, para
+aplicarles una función. Son identificadas con números, 1 son renglones y 2 son
+columnas.
+* FUN: La función que aplicaremos a la matriz x en su dimensión MARGIN.
+
+```{r}
+m_1 <- matrix(c <- (1:10), nrow = 5, ncol = 6)
+a_m1 <- apply(m_1, 2, sum)
+m_1
+a_m1
+```
+
+LAPPLY(): es una caso especial de apply(), diseñado para aplicar funciones a todos
+los elementos de una lista. La l de su nombre se refiere, precisamente, a lista.
+Es útil para realizar operaciones en objetos de lista y devuelve un objeto de lista
+de la misma longitud que el campo original. lappy() devuelve una lista de longitud 
+similar al objeto de entrada, cada elemento del cual es el resultado de aplicar 
+FUN al elemento correspondiente de la lista. lapply en R toma la lista, el vector
+o el marco de datos como entrada y da salida en la lista.
+
+EJEMPLO: Cambiar el valor de cadena de una matriz a minusculas con la función
+tolower. Construir una matriz con el nombre de las peliculas famosas. El nombre
+esta en formato de mayusculas.
+
+```{r}
+peliculas <- c("SPYDERMAN", "BATMAN", "VERTIGO", "CHINATOWN")
+peliculas_inferior <- lapply(peliculas, tolower)
+str(peliculas_inferior)
+
+peliculas_inferior <- unlist(lapply(peliculas, tolower))
+
+str(peliculas_inferior)
+```
+SAPPLY(): Toma la lista, el vector o el marco de datos como entrada y da salida
+en vector o matriz. Es útil para operaciones en objetos de lista y devuelve un 
+objeto de lista de la misma longitud que el conjunto original. La funcion sapply
+en R hace el mismo trabajo que la función lapply() pero devuelve un vector. 
+
+```{r}
+dt <- cars
+lmn_cars <- lapply(dt, min)
+smn_cars <- sapply(dt, min)
+lmn_cars
+```
+```{r}
+smn_cars
+```
+```{r}
+lmxcars <- lapply(dt, max)
+smxcars <- sapply(dt, max)
+lmxcars
+```
+```{r}
+smxcars
+```
+```{r}
+avg <- function(x){
+  (min(x) + max(x))/2 }
+fcars <- sapply(dt, avg)
+fcars
+```
+VAPPLY(): Se utiliza para aplicar una funcion a un vector o una lista y especifi-
+car el tipo de valor de retorno que se espera. La sintaxis basica de vapply es la
+siguiente:
+
+vapply(X, FUN, FUN.VALUE)
+
+* x: Es el vector o lista sobre el cual se va a aplicar la funcion
+* FUN: Es la funcion que se va a aplicar a cada elemento de x.
+* FUN.VALUE: Especifica el tipo de retorno que se espera
+
+```{r}
+numeros <- c(1, 2, 3, 4, 5)
+resultados <- vapply(numeros, function(x) as.integer(x^2), integer(1))
+resultados
+```
+
+CALCULAR AREA DE UN CIRCULO USANDO LAPPLY, SAPPLY Y VAPPLY
+
+```{r}
+calcular_area <- function(radio){
+  return(pi*radio^2)
+}
+
+radios <- list(1, 2, 3, 4, 5)
+areas <- lapply(radios, calcular_area)
+areas_1 <- sapply(radios, calcular_area)
+areas_2 <- vapply(radios, calcular_area, numeric(1))
+areas
+areas_1
+areas_2
+```
+
+
+
