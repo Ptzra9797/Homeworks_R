@@ -1,0 +1,65 @@
+---
+title: "Homework_3"
+author: "Mynor_Petzera"
+date: "2023-06-13"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(readr)
+
+ruta <- "primary_results.csv"
+dataset_results <- read.csv(ruta)
+head(dataset_results)
+```
+
+1. FILTRAR TODOS LOS VOTOS DEL ESTADO DE FLORIDA
+
+```{r}
+dataset_results%>%
+  filter(state == 'Florida')
+```
+2. UTILICE OPERADORES LOGICOS
+2.1 FILTRAR VOTOS PARA LOS CANDIDATOS HILLARY CLINTON O DONALD TRUMP
+
+```{r}
+dataset_results %>%
+  filter(candidate == 'Hillary Clinton' | candidate =="Donald Trump")
+```
+
+2.2 Filtrar votos para el partido Demócrata y el condado Shelby
+
+```{r}
+dataset_results %>%
+  filter( party == 'Democrat' & county =="Shelby")
+```
+
+2.3. FILTRAR VOTOS PARA EL ESTADO DE ALABAMA Y QUE LA CANTIDAD DE VOTOS SEA MAYOR A 15000
+
+```{r}
+dataset_results %>%
+  filter( state == 'Alabama' & votes > 15000)
+```
+
+3. UTILICE LA FUNCIÓN SELECT Y ARRANGE
+3.1 FILTRAR VOTOS PARA EL ESTADO DE TEXAS Y CONDADO DENTON, SELECIONANDO UNICAMENTE LAS COLUMNAS PARTY, CANDIDATE, VOTES, LUEGO ORDENE DE FORMA DESCENDENTE POR LA COLUMNA VOTES
+
+```{r}
+dataset_results %>%
+  filter( state == 'Texas' & county =="Denton") %>%
+  select(party, candidate, votes)%>%
+  arrange(desc(votes))
+```
+
+4. UTILICE EL VERBO MUTATE Y ARRANGE PARA EL SIGUIENTE FILTRADO
+
+4.1 FILTRAR POR EL PARTIDO REPUBLICANO, QUE EL CANDIDATO SEA TED CRUZ EN EL ESTADO DE ALASKA, LUEGO AGREGUE UNA COLUMNA QUE SE LLAME VOTE_COUNT QUE SEA LA DIVISION DE VOTES POR FRACIOT_VOTES (VOTES/FRACTION_VOTES), FINALMENTE ORDENE DE FORMA DESCENDENTE POR VOTE_COUNT
+
+```{r}
+dataset_results %>%
+  filter( party == 'Republican' & candidate == 'Ted Cruz' & state == 'Alaska') %>%
+  mutate(vote_count = votes/fraction_votes) %>%
+  select(party, candidate, state, vote_count) %>%
+  arrange(desc(vote_count))
+```
