@@ -1,0 +1,69 @@
+---
+title: "Homework_5"
+author: "Mynor_Petzera"
+date: "2023-07-04"
+output: html_document
+---
+
+
+Left-Joining questions and tags
+
+```{r}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(tidyverse)
+
+ruta <- read.csv("questions.csv")
+ruta_1 <- read.csv("answers.csv")
+ruta_2 <- read.csv("tags.csv")
+ruta_3 <- read.csv("question_tags.csv")
+
+questions_with_tags <- left_join(ruta, ruta_3, by = c("id" = "question_id")) %>%
+  left_join(ruta_2, by = "id") %>%
+  mutate(tag_name = replace_na(tag_name,"only-r"))
+
+questions_with_tags
+```
+
+Comparing scores across tags
+
+```{r}
+questions_with_tags %>%
+  group_by(tag_name) %>%
+  summarise(mean_score = median(score)) %>%
+  arrange(desc(mean_score))
+```
+Finding gaps between questions and answers
+
+```{r}
+gaps_between <- inner_join(ruta, ruta_1, by = c("id" = "question_id"), suffix = c("_question","_answer")) %>%
+  mutate(gpa = creation_date_answer - creation_date_quetion)
+
+gaps_between
+```
+
+
+Joining question and answer counts
+
+```{r}
+answer_counts<- ruta_1 %>%
+  count(question_id) %>%
+  arrange(desc(n))
+answer_counts
+
+question_answer_counts <- left_join(answer_counts, ruta, by = c("question_id" = "id")) %>%
+  mutate(n = replace_na(0))
+
+question_answer_counts
+```
+
+Joining questions, answers, and tags
+
+```{r}
+joining_questions <- inner_join(ruta_3, question_answer_counts, by = "question_id")
+inner_join(joining_questions, ruta_2, by = c("question_id" = "id"))
+```
+
+
+
